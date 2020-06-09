@@ -30,7 +30,7 @@ node{
               steps{
                   script{
 		# sh 'cp -r ../devops-training@2/target .'
-                   sh 'docker build . -t yashasvinerali/app1:1.0.0
+                   sh 'docker build . -t yashasvinerali/app1:1.0.0'
 		   withCredentials([string(credentialsId: 'docker_password', variable: 'docker_password')]) {
 				    
 				  sh 'docker login -u yashasvinerali -p $docker_password'
