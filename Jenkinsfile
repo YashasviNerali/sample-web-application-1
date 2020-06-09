@@ -1,16 +1,10 @@
 currentBuild.displayName = "Final_Demo # "+currentBuild.number
 
-   def getDockerTag(){
-        def tag = sh script: 'git rev-parse HEAD', returnStdout: true
-        return tag
-        }
-        
+   
 
 pipeline{
         agent any  
-        environment{
-	    Docker_tag = getDockerTag()
-        }
+        
         
         stages{
 
@@ -25,7 +19,7 @@ pipeline{
             }
                   steps{
                       script{
-                      withSonarQubeEnv('sonarserver') { 
+                      withSonarQubeEnv('sonar') { 
                       sh "mvn sonar:sonar"
                        }
                       timeout(time: 1, unit: 'HOURS') {
@@ -45,32 +39,18 @@ pipeline{
                 {
               steps{
                   script{
-		 sh 'cp -r ../devops-training@2/target .'
-                   sh 'docker build . -t deekshithsn/devops-training:$Docker_tag'
+		# sh 'cp -r ../devops-training@2/target .'
+                   sh 'docker build . -t yashasvinerali/app1:1.0.0
 		   withCredentials([string(credentialsId: 'docker_password', variable: 'docker_password')]) {
 				    
-				  sh 'docker login -u deekshithsn -p $docker_password'
-				  sh 'docker push deekshithsn/devops-training:$Docker_tag'
+				  sh 'docker login -u yashasvinerali -p $docker_password'
+				  sh 'docker push yashasvinerali/app1:1.0.0
 			}
                        }
                     }
                  }
 		 
-		stage('ansible playbook'){
-			steps{
-			 	script{
-				    sh '''final_tag=$(echo $Docker_tag | tr -d ' ')
-				     echo ${final_tag}test
-				     sed -i "s/docker_tag/$final_tag/g"  deployment.yaml
-				     '''
-				    ansiblePlaybook become: true, installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yaml'
-				}
-			}
-		}
 		
-	
-		
-               }
 	       
 	       
 	       
