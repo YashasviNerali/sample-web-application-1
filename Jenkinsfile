@@ -9,7 +9,7 @@ pipeline{
         stages{
 
 
-              
+		stage('sonarstage'){
                   steps{
                       script{
                       withSonarQubeEnv('sonar') { 
@@ -23,7 +23,7 @@ pipeline{
                     }
 		    sh "mvn clean install"
                   }
-                }  
+		  }       }  
               }
 
 
