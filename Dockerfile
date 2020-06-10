@@ -1,4 +1,4 @@
-FROM tomcat 
+FROM tomcat:7 
 WORKDIR webapps 
 COPY target/WebApp.war .
 RUN rm -rf ROOT && mv WebApp.war ROOT.war
